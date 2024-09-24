@@ -15,8 +15,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const existedUser = await userModel.findOne({ email });
 
-  if (existedUser)
-    throw new ApiError(409, "User with email or username already exists");
+  if (existedUser) {
+    throw new ApiError(409, "User with email already exists");
+  }
 
   const user = await userModel.create({
     name,
@@ -32,7 +33,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(200, createdUser, "User registered successfully"));
+    .json(new ApiResponse(201, createdUser, "User registered successfully"));
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
@@ -85,11 +86,11 @@ const login = asyncHandler(async (req, res) => {
   } else {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
     return res
@@ -106,7 +107,9 @@ const logout = asyncHandler(async (req, res) => {
     sameSite: "None",
   });
 
-  return res.status(200).json(new ApiResponse(200, null, "User logged out successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "User logged out successfully"));
 });
 
 const getUser = asyncHandler(async (req, res) => {
