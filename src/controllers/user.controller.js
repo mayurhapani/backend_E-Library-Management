@@ -90,7 +90,7 @@ const login = asyncHandler(async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     return res
@@ -119,12 +119,13 @@ const getUser = asyncHandler(async (req, res) => {
       .json(new ApiResponse(200, null, "User is not authenticated"));
   }
 
-  const user = await userModel.findById(req.user._id)
+  const user = await userModel
+    .findById(req.user._id)
     .populate({
-      path: 'borrowedBooks.book',
-      select: 'title author genre image' // Add any other fields you need
+      path: "borrowedBooks.book",
+      select: "title author genre image",
     })
-    .select('-password');
+    .select("-password");
 
   if (!user) {
     throw new ApiError(404, "User not found");
@@ -164,35 +165,6 @@ const updateFcmToken = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, updatedUser, "FCM token updated successfully"));
 });
 
-const sendTestNotification = asyncHandler(async (req, res) => {
-  try {
-    const user = await userModel.findById(req.user._id);
-    if (!user || !user.fcmToken) {
-      return res.status(400).json({ error: "User FCM token not found" });
-    }
-
-    console.log("Attempting to send notification to token:", user.fcmToken);
-
-    const result = await sendTaskNotification(
-      user.fcmToken,
-      "Test Notification",
-      "This is a test notification"
-    );
-
-    console.log("Notification send result:", result);
-
-    res
-      .status(200)
-      .json({ message: "Test notification sent successfully", result });
-  } catch (error) {
-    console.error("Detailed error in sendTestNotification:", error);
-    res.status(500).json({
-      error: "Failed to send test notification",
-      details: error.message,
-    });
-  }
-});
-
 export {
   registerUser,
   login,
@@ -202,5 +174,4 @@ export {
   updateUser,
   deleteUser,
   updateFcmToken,
-  sendTestNotification,
 };

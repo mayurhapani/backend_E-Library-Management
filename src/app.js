@@ -46,13 +46,12 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-// Update this route to use __dirname
 app.get("/firebase-messaging-sw.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
   res.sendFile(path.join(__dirname, "../public/firebase-messaging-sw.js"));
 });
 
-//user routers
+//default routers
 app.get("/", (req, res) => {
   res.send("welcome!");
 });

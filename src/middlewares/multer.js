@@ -16,14 +16,14 @@ if (!fs.existsSync(uploadDir)) {
 // Ensure the uploads folder exists
 const uploadPath = path.join(__dirname, "../uploads");
 
-// Configure multer to store files in the 'uploads' directory
+// Configure multer to store files i
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname)); // Save the file with a unique name
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   },
 });
 
