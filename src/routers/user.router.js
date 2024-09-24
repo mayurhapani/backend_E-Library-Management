@@ -11,8 +11,6 @@ import {
   sendTestNotification,
 } from "../controllers/user.controller.js";
 import { isAuth } from "../middlewares/isAuth.middleware.js";
-import { sendTaskNotification } from "../helpers/firebaseAdmin.js";
-import { userModel } from "../models/user.model.js";
 
 const userRouter = Router();
 

@@ -17,7 +17,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, "Password is require"],
+      required: [true, "Password is required"],
     },
     role: {
       type: String,
@@ -31,6 +31,26 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+const borrowedBookSchema = new Schema({
+  book: {
+    type: Schema.Types.ObjectId,
+    ref: "Book",
+    required: true,
+  },
+  borrowDate: {
+    type: Date,
+    default: Date.now,
+  },
+  returnDate: {
+    type: Date,
+    required: true,
+  },
+});
+
+userSchema.add({
+  borrowedBooks: [borrowedBookSchema],
+});
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -49,7 +69,7 @@ userSchema.methods.generateToken = function () {
       _id: this._id,
     },
     process.env.TOKEN_SECRET,
-    { expiresIn: process.TOKEN_EXPIRY }
+    { expiresIn: process.env.TOKEN_EXPIRY }
   );
 };
 

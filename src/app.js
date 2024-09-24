@@ -2,9 +2,14 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { userRouter } from "./routers/user.router.js";
-import path from "path"; // Add this import
+import path from "path";
+import { fileURLToPath } from "url";
+
 import admin from "firebase-admin";
-import { recipeRouter } from "./routers/recipe.router.js";
+import { bookRouter } from "./routers/book.router.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -51,7 +56,8 @@ app.get("/firebase-messaging-sw.js", (req, res) => {
 app.get("/", (req, res) => {
   res.send("welcome!");
 });
+
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/Recipes", recipeRouter);
+app.use("/api/v1/books", bookRouter);
 
 export { app };
