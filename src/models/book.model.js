@@ -25,9 +25,10 @@ const bookSchema = new Schema(
       type: String,
       required: true,
     },
-    availableCopies: {
-      type: Number,
-      default: 1,
+    description: {
+      type: String,
+      required: true,
+      trim: true,
     },
   },
   { timestamps: true }
