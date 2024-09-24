@@ -5,11 +5,18 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const addBook = asyncHandler(async (req, res) => {
-  const { title, author, genre, publicationDate, image, availableCopies } =
-    req.body;
+  const {
+    title,
+    author,
+    genre,
+    publicationDate,
+    description,
+    image,
+    availableCopies,
+  } = req.body;
 
   if (
-    [title, author, genre, publicationDate, image].some(
+    [title, author, genre, publicationDate, image, description].some(
       (field) => field?.trim() === ""
     )
   ) {
@@ -20,6 +27,7 @@ const addBook = asyncHandler(async (req, res) => {
     title,
     author,
     genre,
+    description,
     publicationDate,
     image,
     availableCopies: availableCopies || 1,
@@ -32,8 +40,15 @@ const addBook = asyncHandler(async (req, res) => {
 
 const updateBook = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { title, author, genre, publicationDate, image, availableCopies } =
-    req.body;
+  const {
+    title,
+    author,
+    genre,
+    publicationDate,
+    image,
+    availableCopies,
+    description,
+  } = req.body;
 
   const book = await bookModel.findByIdAndUpdate(
     id,
@@ -41,6 +56,7 @@ const updateBook = asyncHandler(async (req, res) => {
       title,
       author,
       genre,
+      description,
       publicationDate,
       image,
       availableCopies,
