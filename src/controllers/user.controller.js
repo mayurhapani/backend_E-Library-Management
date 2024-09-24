@@ -119,9 +119,20 @@ const getUser = asyncHandler(async (req, res) => {
       .json(new ApiResponse(200, null, "User is not authenticated"));
   }
 
+  const user = await userModel.findById(req.user._id)
+    .populate({
+      path: 'borrowedBooks.book',
+      select: 'title author genre image' // Add any other fields you need
+    })
+    .select('-password');
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
   return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "User data retrieved successfully"));
+    .json(new ApiResponse(200, user, "User data retrieved successfully"));
 });
 
 const getAllUsers = asyncHandler(async (req, res) => {

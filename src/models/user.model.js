@@ -28,6 +28,16 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    borrowedBooks: [
+      {
+        book: {
+          type: Schema.Types.ObjectId,
+          ref: "Book",
+        },
+        borrowDate: Date,
+        returnDate: Date,
+      },
+    ],
   },
   { timestamps: true }
 );
