@@ -88,8 +88,8 @@ const login = asyncHandler(async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: true, // Always use secure in production
+      sameSite: 'none', // This allows cross-site cookie setting
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
